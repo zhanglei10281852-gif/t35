@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -17,34 +18,46 @@ public class StatisticsController {
 
     @GetMapping("/monthly-sales")
     public ResponseEntity<?> getMonthlySalesSummary(
-            @RequestParam int year,
-            @RequestParam int month) {
-        Map<String, Object> result = statisticsService.getMonthlySalesSummary(year, month);
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month) {
+        LocalDate now = LocalDate.now();
+        int y = year != null ? year : now.getYear();
+        int m = month != null ? month : now.getMonthValue();
+        Map<String, Object> result = statisticsService.getMonthlySalesSummary(y, m);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/category-sales-ratio")
     public ResponseEntity<?> getCategorySalesRatio(
-            @RequestParam int year,
-            @RequestParam int month) {
-        List<Map<String, Object>> result = statisticsService.getCategorySalesRatio(year, month);
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month) {
+        LocalDate now = LocalDate.now();
+        int y = year != null ? year : now.getYear();
+        int m = month != null ? month : now.getMonthValue();
+        List<Map<String, Object>> result = statisticsService.getCategorySalesRatio(y, m);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/average-consumption")
     public ResponseEntity<?> getAverageMonthlyConsumption(
-            @RequestParam int year,
-            @RequestParam int month) {
-        Map<String, Object> result = statisticsService.getAverageMonthlyConsumption(year, month);
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month) {
+        LocalDate now = LocalDate.now();
+        int y = year != null ? year : now.getYear();
+        int m = month != null ? month : now.getMonthValue();
+        Map<String, Object> result = statisticsService.getAverageMonthlyConsumption(y, m);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/top-products")
     public ResponseEntity<?> getTopSellingProducts(
-            @RequestParam int year,
-            @RequestParam int month,
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month,
             @RequestParam(defaultValue = "10") int limit) {
-        List<Map<String, Object>> result = statisticsService.getTopSellingProducts(year, month, limit);
+        LocalDate now = LocalDate.now();
+        int y = year != null ? year : now.getYear();
+        int m = month != null ? month : now.getMonthValue();
+        List<Map<String, Object>> result = statisticsService.getTopSellingProducts(y, m, limit);
         return ResponseEntity.ok(result);
     }
 
@@ -56,23 +69,31 @@ public class StatisticsController {
 
     @GetMapping("/remittance-trend")
     public ResponseEntity<?> getRemittanceTrend(
-            @RequestParam int startYear,
-            @RequestParam int startMonth,
-            @RequestParam int endYear,
-            @RequestParam int endMonth) {
-        List<Map<String, Object>> result = statisticsService.getMonthlyRemittanceTrend(
-                startYear, startMonth, endYear, endMonth);
+            @RequestParam(required = false) Integer startYear,
+            @RequestParam(required = false) Integer startMonth,
+            @RequestParam(required = false) Integer endYear,
+            @RequestParam(required = false) Integer endMonth) {
+        LocalDate now = LocalDate.now();
+        int sy = startYear != null ? startYear : now.minusMonths(5).getYear();
+        int sm = startMonth != null ? startMonth : now.minusMonths(5).getMonthValue();
+        int ey = endYear != null ? endYear : now.getYear();
+        int em = endMonth != null ? endMonth : now.getMonthValue();
+        List<Map<String, Object>> result = statisticsService.getMonthlyRemittanceTrend(sy, sm, ey, em);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/sales-trend")
     public ResponseEntity<?> getSalesTrend(
-            @RequestParam int startYear,
-            @RequestParam int startMonth,
-            @RequestParam int endYear,
-            @RequestParam int endMonth) {
-        Map<String, Object> result = statisticsService.getMonthlySalesTrend(
-                startYear, startMonth, endYear, endMonth);
+            @RequestParam(required = false) Integer startYear,
+            @RequestParam(required = false) Integer startMonth,
+            @RequestParam(required = false) Integer endYear,
+            @RequestParam(required = false) Integer endMonth) {
+        LocalDate now = LocalDate.now();
+        int sy = startYear != null ? startYear : now.minusMonths(5).getYear();
+        int sm = startMonth != null ? startMonth : now.minusMonths(5).getMonthValue();
+        int ey = endYear != null ? endYear : now.getYear();
+        int em = endMonth != null ? endMonth : now.getMonthValue();
+        Map<String, Object> result = statisticsService.getMonthlySalesTrend(sy, sm, ey, em);
         return ResponseEntity.ok(result);
     }
 

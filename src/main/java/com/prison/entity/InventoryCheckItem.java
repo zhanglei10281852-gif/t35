@@ -1,5 +1,6 @@
 package com.prison.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
@@ -14,6 +15,7 @@ public class InventoryCheckItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "check_id", nullable = false)
     private InventoryCheck inventoryCheck;
